@@ -1,0 +1,26 @@
+{
+  "base_url_path": "/cal/",
+  "targets": [
+    {
+      "name": "leidencal",
+      "url": "https://rooster.universiteitleiden.nl/ical"
+    },
+    {
+      "name": "delftcal",
+      "url": "https://mytimetable.tudelft.nl/ical"
+    }
+  ],
+  "groupings": {
+    "tentamen": [
+      "Digitaal Tentamen",
+      "Tentamen",
+      "Hertentamen",
+      "Digital Exam with registration on campus",
+      "Written Exam with registration on campus",
+      "Presentation"
+    ],
+    "hoorcollege": ["Hoorcollege", "Lecture"],
+    "werkcollege": ["Werkcollege", "Practicum"]
+  },
+  "default_group": "tentamen"
+}
