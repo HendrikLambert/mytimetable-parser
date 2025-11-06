@@ -1,15 +1,14 @@
 {
-  "base_url_path": "/cal/",
-  "targets": [
-    {
-      "name": "leidencal",
+  "base_url_path": "/cal",
+  "bind_addr": ":8080",
+  "targets": {
+    "leidencal": {
       "url": "https://rooster.universiteitleiden.nl/ical"
     },
-    {
-      "name": "delftcal",
+    "delftcal": {
       "url": "https://mytimetable.tudelft.nl/ical"
     }
-  ],
+  },
   "groupings": {
     "tentamen": [
       "Digitaal Tentamen",
@@ -19,7 +18,7 @@
       "Written Exam with registration on campus",
       "Presentation"
     ],
-    "hoorcollege": ["Hoorcollege", "Lecture"],
+    "hoorcollege": ["Hoorcollege", "Lecture", "Additional", "MIM"],
     "werkcollege": ["Werkcollege", "Practicum"]
   },
   "default_group": "tentamen"

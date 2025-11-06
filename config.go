@@ -12,14 +12,15 @@ var config Config
 Config represents the structure of the configuration file.
 */
 type Config struct {
-	BaseURLPath string `json:"base_url_path"`
-	Targets     []struct {
-		Name string `json:"name"`
-		URL  string `json:"url"`
-	} `json:"targets"`
+	BaseURLPath string              `json:"base_url_path"`
+	BindAddress string              `json:"bind_address"`
+	// Targets maps target names to their respective URLs
+	Targets     map[string]struct {
+		URL string `json:"url"`
+	}   `json:"targets"`
 	// Groupings define target groupings for different types of activities
-	Groupings map[string][]string `json:"groupings"`
-	DefaultGroup string `json:"default_group"`
+	Groupings   map[string][]string `json:"groupings"`
+	DefaultGroup string             `json:"default_group"`
 }
 
 
@@ -47,6 +48,12 @@ func loadConfig(location string) error {
 	}
 	if len(config.Groupings) == 0 {
 		return fmt.Errorf("at least one grouping is required in the config file")
+	}
+
+	// Set default values if necessary
+	if config.BindAddress == "" {
+		config.BindAddress = ":8080"
+		fmt.Println("bind_address not set in config, using default :8080")
 	}
 
 	fmt.Println("Configuration loaded successfully")

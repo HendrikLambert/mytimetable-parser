@@ -14,10 +14,15 @@ func main() {
 	}
 
 	err := loadConfig(confLoc)
-	
+
 	if err != nil {
 		fmt.Printf("Error loading config from %s: %v\n", confLoc, err)
 		return
 	}
 
+	err = startWebServer()
+	if err != nil {
+		fmt.Printf("Error starting web server: %v\n", err)
+		return
+	}
 }
