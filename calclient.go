@@ -103,9 +103,7 @@ func requestCalendar(calType string, calTarget string, params url.Values) (*ics.
 	filteredCalendar := ics.NewCalendar()
 
 	// Copy all properties from original calendar
-	for _, prop := range calendar.CalendarProperties {
-		filteredCalendar.CalendarProperties = append(filteredCalendar.CalendarProperties, prop)
-	}
+	filteredCalendar.CalendarProperties = append(filteredCalendar.CalendarProperties, calendar.CalendarProperties...)
 
 	// Update cal name
 	filteredCalendar.SetName(fmt.Sprintf("Filtered calendar - %s", calType))
