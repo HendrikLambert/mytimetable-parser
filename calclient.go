@@ -112,6 +112,12 @@ func requestCalendar(calType string, calTarget string, params url.Values) (*ics.
 	for _, event := range calendar.Events() {
 		grouping := getICalEntryGrouping(event)
 		if grouping == calType {
+			// Remove course code from summary if present
+			summary := event.GetProperty(ics.ComponentPropertySummary).Value
+			if idx := strings.Index(summary, " - "); idx != -1 {
+				// Found " - ", remove everything before it (course code)
+				event.SetSummary(summary[idx+3:])
+			}
 			filteredCalendar.AddVEvent(event)
 		}
 	}
