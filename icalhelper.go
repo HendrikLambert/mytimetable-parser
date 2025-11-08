@@ -9,7 +9,7 @@ import (
 )
 
 // detectICalEntryType extracts the event type from the description field.
-// The type is expected to be on the first line in the format "Type: <type>".
+// The type is expected to be in the format "Type: <type>" on any line.
 // Returns an empty string if no type is found.
 func detectICalEntryType(e *ics.VEvent) string {
 	descProp := e.GetProperty(ics.ComponentPropertyDescription)
@@ -19,18 +19,19 @@ func detectICalEntryType(e *ics.VEvent) string {
 
 	desc := descProp.Value
 
-	// Get the first line of the description
-	firstLine := strings.Split(desc, "\n")[0]
-	firstLine = strings.TrimSpace(firstLine)
+	// Search through all lines of the description
+	lines := strings.Split(desc, "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
 
-	// Check if it starts with "Type: "
-	if strings.HasPrefix(firstLine, "Type: ") {
-		return strings.TrimSpace(strings.TrimPrefix(firstLine, "Type: "))
-	} else {
-		fmt.Printf("[iCal] Unknown event type '%s'\n", firstLine)
-		return ""
+		// Check if this line starts with "Type: "
+		if strings.HasPrefix(line, "Type: ") {
+			return strings.TrimSpace(strings.TrimPrefix(line, "Type: "))
+		}
 	}
 
+	// No type found
+	return ""
 }
 
 // matchEventToGrouping matches an event type to a main grouping category.
