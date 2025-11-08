@@ -17,7 +17,13 @@ func startWebServer() error {
 	// Compile the regex
 	regexTarget = regexp.MustCompile(`^` + config.BaseURLPath + `/([^/]+)/ical$`)
 
-	router = gin.Default()
+	router = gin.New()
+	// Add custom logging middleware that skips health endpoint
+	router.Use(
+		gin.LoggerWithWriter(gin.DefaultWriter, config.BaseURLPath+"/health"),
+		gin.Recovery(),
+	)
+
 	setupRoutes()
 
 	err := router.Run(config.BindAddress)
