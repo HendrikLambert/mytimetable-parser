@@ -73,6 +73,15 @@ func fetchCalendarData(calTarget string, params url.Values) (*ics.Calendar, erro
 		return nil, fmt.Errorf("failed to parse iCal data: %w", err)
 	}
 
+	// Remove course code from summaries
+	for _, event := range calendar.Events() {
+		summary := event.GetProperty(ics.ComponentPropertySummary).Value
+		if idx := strings.Index(summary, " - "); idx != -1 {
+			// Found " - ", remove everything before it (course code)
+			event.SetSummary(summary[idx+3:])
+		}
+	}
+
 	// Store parsed calendar in cache
 	cacheMutex.Lock()
 	calendarCache[cacheKey] = cacheEntry{
@@ -112,12 +121,6 @@ func requestCalendar(calType string, calTarget string, params url.Values) (*ics.
 	for _, event := range calendar.Events() {
 		grouping := getICalEntryGrouping(event)
 		if grouping == calType {
-			// Remove course code from summary if present
-			summary := event.GetProperty(ics.ComponentPropertySummary).Value
-			if idx := strings.Index(summary, " - "); idx != -1 {
-				// Found " - ", remove everything before it (course code)
-				event.SetSummary(summary[idx+3:])
-			}
 			filteredCalendar.AddVEvent(event)
 		}
 	}
